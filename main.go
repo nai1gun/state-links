@@ -33,7 +33,7 @@ func visit(path string, f os.FileInfo, _ error) error {
 
 func main() {
 	readStates()
-	root := "..\\unity-client\\src\\main\\angular"
+	root := "..\\unity-client\\src\\main\\angular" // Root folder for the search
 	err := filepath.Walk(root, visit)
 	fmt.Printf("filepath.Walk() returned %v\n", err)
 }
