@@ -73,7 +73,7 @@ func getStateGoLinks(path string, f os.FileInfo, _ error) error {
 		b, _ := ioutil.ReadFile(path)
 		content := string(b)
 		if (strings.HasSuffix(f.Name(), ".js") && !strings.HasSuffix(f.Name(), "_test.js") && strings.Contains(content, "$state.go")) {
-			re := regexp.MustCompile("\\(\\s?'([^']+)'")
+			re := regexp.MustCompile("\\(?'([^']+)'")
 			splitted := strings.Split(content, "$state.go")
 			for _, part := range splitted {
 				rm := re.FindStringSubmatch(part)
