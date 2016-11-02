@@ -36,6 +36,18 @@ func readAllStates() []State {
 	return states
 }
 
+func fixStatesController(states []State) []State {
+	for i, state := range states {
+		splitted := strings.Split(state.Controller, " as ")
+		if (len(splitted) == 2) {
+			state.Controller = splitted[0]
+			state.ControllerAs = splitted[1]
+			states[i] = state
+		}
+	}
+	return states
+}
+
 func readRootStateNamesToKeep() map[string]string {
 	file, _ := os.Open("root_states.csv")
 	scanner := bufio.NewScanner(file)
@@ -82,8 +94,9 @@ func getRemainingStateNames(allStates []State, stateNames map[string]string) []s
 
 func main() {
 	var states = readAllStates()
+	fixStatesController(states)
 	var stateNamesToKeep = readRootStateNamesToKeep()
-	stateNamesToKeep = checkAndAppendChildStates(states, stateNamesToKeep)
+	checkAndAppendChildStates(states, stateNamesToKeep)
 	var stateNamesList = []string {}
 	for s := range stateNamesToKeep {
 		stateNamesList = append(stateNamesList, s)
