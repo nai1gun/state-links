@@ -13,7 +13,7 @@ import (
 type State struct {
 	Name string
 	Url string
-	TenplateUrl string
+	TemplateUrl string
 	Controller string
 	ControllerAs string
 	Views Views
