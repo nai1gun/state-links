@@ -13,6 +13,7 @@ import (
 )
 
 const rootFolder = `..\unity-client\src\main\angular`
+const systemSeparator = `\`
 
 type StringSet map[string]string
 
@@ -162,7 +163,7 @@ func readAllFiles() FilesMap {
 		if (!f.IsDir() && hasAnySuffix(absPath, ".html", ".js") && hasNoSuffix(absPath, "_test.html")) {
 			b, _ := ioutil.ReadFile(absPath)
 			content := string(b)
-			relativePath := strings.TrimPrefix(absPath, rootFolder + `\`)
+			relativePath := strings.TrimPrefix(absPath, rootFolder + systemSeparator)
 			filesMap[relativePath] = content
 		}
 		return nil
