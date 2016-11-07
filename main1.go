@@ -55,6 +55,15 @@ func (states States) Contains(stateName string) bool {
 	return false
 }
 
+func (states States) Get(stateName string) *State {
+	for _, state := range states {
+		if (state.Name == stateName) {
+			return &state
+		}
+	}
+	return nil
+}
+
 type Views map[string]View
 
 type View struct {
@@ -204,21 +213,27 @@ func findStateControllers(state State, filesMap FilesMap) Controllers {
 func findStateGo(allStates States, stateNames StringSet, filesMap FilesMap) StringSet {
 	for _, state := range allStates {
 		if (stateNames.Contains(state.Name)) {
-			var controllers = findStateControllers(state, filesMap)
-			if (len(controllers) == 0) {
-				fmt.Printf("Couldn't find any controllers for state '%s'\n", state.Name)
-			} else {
-				for _, content := range controllers {
-					goReferenceStates := findStateGosForControllerContent(content)
-					if (len(goReferenceStates) > 0) {
-						for _, reference := range goReferenceStates {
-							if (allStates.Contains(reference)) {
-								stateNames.Put(reference)
+			var findInState func(State)
+			findInState = func(st State) {
+				var controllers = findStateControllers(st, filesMap)
+				if (len(controllers) == 0) {
+					fmt.Printf("Couldn't find any controllers for state '%s'\n", st.Name)
+				} else {
+					for _, content := range controllers {
+						goReferenceStates := findStateGosForControllerContent(content)
+						if (len(goReferenceStates) > 0) {
+							for _, reference := range goReferenceStates {
+								if (allStates.Contains(reference) && !stateNames.Contains(reference)) {
+									stateNames.Put(reference)
+									newState := allStates.Get(reference)
+									findInState(*newState) //find recursively
+								}
 							}
 						}
 					}
 				}
 			}
+			findInState(state)
 		}
 	}
 	return stateNames
