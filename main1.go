@@ -221,13 +221,11 @@ func findStateGo(allStates States, stateNames StringSet, filesMap FilesMap) Stri
 				} else {
 					for _, content := range controllers {
 						goReferenceStates := findStateGosForControllerContent(content)
-						if (len(goReferenceStates) > 0) {
-							for _, reference := range goReferenceStates {
-								if (allStates.Contains(reference) && !stateNames.Contains(reference)) {
-									stateNames.Put(reference)
-									newState := allStates.Get(reference)
-									findInState(*newState) //find recursively
-								}
+						for _, reference := range goReferenceStates {
+							if (allStates.Contains(reference) && !stateNames.Contains(reference)) {
+								stateNames.Put(reference)
+								newState := allStates.Get(reference)
+								findInState(*newState) //find recursively
 							}
 						}
 					}
