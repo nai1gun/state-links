@@ -55,7 +55,7 @@ func (states States) Contains(stateName string) bool {
 	return false
 }
 
-func (states States) Get(stateName string) *State {
+func (states States) Get(stateName string) *State {// return pointer because struct object return cannot be nil
 	for _, state := range states {
 		if (state.Name == stateName) {
 			return &state
